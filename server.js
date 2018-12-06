@@ -34,7 +34,44 @@ app.use(cookieParser());
 // setup port
 app.set('port', process.env.PORT || 3000);
 
-app.get('/', function(req, res, next) {
+// seperate route functions.
+let errFn = (err, req, res, next) => {
+    console.error(err.stack);
+    next(err);
+      /*
+    if (res.headersSent) {
+        return next(err)
+    }
+    res.status(500)
+    res.render('error', { error: err })
+    */
+};
+
+app.use(errFn); // set error handler.
+
+let fn1 = (req, res, next) => {
+    console.log('enter fn1');
+    if (!req.p1) {
+        console.log('step next route');
+        next('route'); // step next route
+    }
+    console.log('fn1 called.');
+    next();
+};
+let fn2 = (req, res, next) => {
+    console.log('enter fn2');
+    if (!req.p2) {
+        console.log('step next route');
+        next('route'); // step next route
+    }
+    console.log('fn2 called.');
+    next();
+};
+
+
+// routes.
+app.get('/', fn1, fn2, function(req, res, next) {
+    console.log('last method called.');
     res.send('success!');
 });
 
