@@ -38,7 +38,7 @@ app.set('port', process.env.PORT || 3000);
 let errFn = (err, req, res, next) => {
     console.error(err.stack);
     next(err);
-      /*
+    /*
     if (res.headersSent) {
         return next(err)
     }
